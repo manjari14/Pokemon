@@ -1,56 +1,45 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
-import "./index.css";
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Chip,
+  Stack,
+} from "@mui/material";
 import { useSelector } from "react-redux";
+import "./index.css";
 
 export default function DescriptionCard() {
-  const pokemon = useSelector((state) => state.pokemon);
+  const pokemon = useSelector((state) => state.pokemon) || {};
+
   return (
     <div className="DescriptionCard">
       <Card sx={{ minWidth: 364 }}>
         <CardMedia
           component="img"
-          height="140"
-          width="240"
           sx={{ width: 300, height: 184 }}
-          image={pokemon.image}
-          alt={pokemon.name}
+          image={pokemon.image || "https://via.placeholder.com/300"}
+          alt={pokemon.name || "Pokemon"}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {pokemon.name}
+            {pokemon.name || "Unknown Pokemon"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            POKEMON TYPE : {pokemon.type}
+            POKEMON TYPE: {pokemon.type || "Unknown"}
           </Typography>
-          <Card>
-            <CardContent>
-              {pokemon.moves && (
+          {pokemon.moves && pokemon.moves.length > 0 && (
+            <Card sx={{ mt: 2 }}>
+              <CardContent>
                 <Stack direction="row" spacing={1}>
-                  <Chip
-                    label={pokemon?.moves[0] || ""}
-                    color="primary"
-                    variant="outlined"
-                  />
-                  <Chip
-                    label={pokemon?.moves[1] || ""}
-                    color="primary"
-                    variant="outlined"
-                  />
-                  <Chip
-                    label={pokemon?.moves[2] || ""}
-                    color="primary"
-                    variant="outlined"
-                  />
+                  {pokemon.moves.slice(0, 3).map((move, index) => (
+                    <Chip key={index} label={move} color="primary" variant="outlined" />
+                  ))}
                 </Stack>
-              )}
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </CardContent>
       </Card>
     </div>
